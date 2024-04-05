@@ -19,6 +19,11 @@ const products = [
     {id: '3', name: 'Product 3', description: 'Another text here', price: '20 SGD' },
 ]
 
+const payments = [
+    {id: '1', name: 'Google Pay'},
+    {id: '2', name: 'Visa / MasterCard'},
+]
+
 app.get('/', (req, res) => {
     res.cookie('username', uuidv4(), { maxAge: 900000, httpOnly: true });
     res.render('pages/welcome');
@@ -45,6 +50,7 @@ app.get('/payment/:id', (req, res) => {
     )
     res.render('pages/payment', { 
         product: product,
+        payments: payments,
     });
 });
 

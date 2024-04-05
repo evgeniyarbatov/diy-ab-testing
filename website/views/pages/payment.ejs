@@ -1,8 +1,14 @@
 <%- include('../partials/header', { title: 'Payment' }) %>
 <section class="container mt-5 text-center">
-    <h2>Pay</h2>
-    <p>Pay for product</p>
+    <h2>Select payment method</h2>
     <%= product.name %> - <%= product.description %> - <%= product.price %>
+    <% payments.forEach((payment)=> { %>
+        <div class="form-check text-left m-2">
+            <input class="form-check-input" type="radio" name="id" value="<%= payment.id %>">
+                <%= payment.name %>
+        </div>
+    <% }) %>
+
     <%- include('../partials/buttons', {
         link: `/receipt/${product.id}`,
         text: 'Pay'
