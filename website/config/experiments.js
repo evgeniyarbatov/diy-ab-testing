@@ -7,7 +7,7 @@ const experiments = [
   {
     feature: 'DefaultSelectedProduct',
     control: 'random',
-    test: 'low-price',
+    test: 'price',
   },
   {
     feature: 'SkipConfirmationScreen',
