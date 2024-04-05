@@ -1,7 +1,3 @@
-const {getLogger} = require('./logger');
-
-const logger = getLogger('logs/experiment.log');
-
 /**
  * Allocate the user to either test or control group
  * @param {string} username UserID accessing the site
@@ -13,11 +9,6 @@ function getExperimentGroup(
     feature,
 ) {
   const group = Math.random() < 0.5 ? 'test' : 'control';
-  logger.info({
-    username: username,
-    feature: feature,
-    group: group,
-  });
   return group;
 }
 

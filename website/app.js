@@ -25,8 +25,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 app.use((req, res, next) => {
   logger.info({
-    username: req.cookies.username,
     url: req.url,
+    cookies: req.cookies,
     extra: {...req.body, ...req.params},
   });
 
@@ -34,7 +34,15 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-  res.cookie('username', uuidv4(), {maxAge: 900000, httpOnly: true});
+  const username = uuidv4();
+  res.cookie('username', username, {maxAge: 900000, httpOnly: true});
+
+  experiments.map((experiment) => {
+    const feature = experiment.feature;
+    const group = getExperimentGroup(username, feature);
+    res.cookie(feature, group, {maxAge: 900000, httpOnly: true});
+  });
+
   res.render('pages/welcome', {
     event: 'welcome',
   });
