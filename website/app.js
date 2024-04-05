@@ -100,10 +100,14 @@ app.post('/receipt/:productId', (req, res) => {
 });
 
 app.post('/log', (req, res) => {
-    const { event } = req.body;
+    console.log(elementId, event, action);
     logger.info({
         userid: req.cookies.username, 
-        event: event,
+        event: {
+            elementId: elementId,
+            event: event,
+            action: action,
+        },
     })
     res.sendStatus(200);
   });
