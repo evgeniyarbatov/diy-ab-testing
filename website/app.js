@@ -6,32 +6,30 @@ const { v4: uuidv4 } = require('uuid');
 const app = express();
 const PORT = 8080;
 
-app.use(cookieParser());
-
-app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
     res.cookie('username', uuidv4(), { maxAge: 900000, httpOnly: true });
-    res.render('products', { title: 'Products' });
+    res.render('pages/welcome');
+});
+
+app.get('/products', (req, res) => {
+    res.render('pages/products');
 });
 
 app.get('/confirm', (req, res) => {
-    console.log(req.cookies.username);
-    res.render('confirm', { title: 'Confirm' });
+    res.render('pages/confirm');
 });
 
 app.get('/payment', (req, res) => {
-    console.log(req.cookies.username);
-    res.render('payment', { title: 'Payment' });
+    res.render('pages/payment');
 });
 
 app.get('/receipt', (req, res) => {
-    console.log(req.cookies.username);
-    res.cookie('username', '', { maxAge: 0 });
-    res.render('receipt', { title: 'Receipt' });
+    res.render('pages/receipt');
 });
 
 app.listen(PORT, () => {
