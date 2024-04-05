@@ -2,12 +2,11 @@
 <section class="container mt-5 text-center">
     <h2>Pay</h2>
     <p>Pay for product</p>
-    <div>
-        <a href="/receipt" class="btn btn-primary m-1 w-100">Pay</a>
-    </div>
-    <div>
-        <a href="/" class="btn btn-secondary m-1 w-100">Cancel</a>
-    </div>
+    <%= product.name %> - <%= product.description %> - <%= product.price %>
+    <%- include('../partials/buttons', {
+        link: `/receipt/${product.id}`,
+        text: 'Pay'
+     }) %>
 </section>
 <%- include('../partials/footer') %>
 

@@ -1,13 +1,21 @@
 <%- include('../partials/header', { title: 'Products' }) %>
 <section class="container mt-5 text-center">
     <h2>Select product</h2>
-    <p>Select one item</p>
-    <div>
-        <a href="/confirm" class="btn btn-primary m-1 w-100">Select</a>
-    </div>
-    <div>
-        <a href="/" class="btn btn-secondary m-1 w-100">Cancel</a>
-    </div>
+    <p>Select one product</p>
+    <form action="/confirm" method="POST">
+        <% products.forEach((product)=> { %>
+            <div class="form-check text-left m-2">
+                <input class="form-check-input" type="radio" name="id" value="<%= product.id %>">
+                    <%= product.name %> - <%= product.description %> - <%= product.price %>
+            </div>
+        <% }) %>
+        <div>
+            <button type="submit" class="btn btn-primary mt-3 m-1 w-100">Select</a>
+        </div>
+        <div>
+            <a href="/" class="btn btn-secondary m-1 w-100">Cancel</a>
+        </div>
+    </form>
 </section>
 <%- include('../partials/footer') %>
 
