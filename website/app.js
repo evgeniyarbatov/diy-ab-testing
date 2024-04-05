@@ -100,7 +100,7 @@ app.post('/receipt/:productId', (req, res) => {
 });
 
 app.post('/log', (req, res) => {
-    console.log(elementId, event, action);
+    const { elementId, event, action } = req.body;
     logger.info({
         userid: req.cookies.username, 
         event: {
