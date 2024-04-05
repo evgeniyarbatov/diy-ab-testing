@@ -27,23 +27,24 @@ const payments = [
     {id: '2', name: 'Visa / MasterCard'},
 ]
 
-app.get('/', (req, res) => {
-    const username = uuidv4()
+app.use((req, res, next) => {
     logger.info({
-        userid: username, 
-        page: 'welcome',
+        username: req.cookies.username, 
+        url: req.url,
+        extra: { ...req.body, ...req.params },
     })
-    res.cookie('username', username, { maxAge: 900000, httpOnly: true });
+
+    next();
+  });
+
+app.get('/', (req, res) => {
+    res.cookie('username', uuidv4(), { maxAge: 900000, httpOnly: true });
     res.render('pages/welcome', {
         event: 'welcome',
     });
 });
 
 app.get('/products', (req, res) => {
-    logger.info({
-        userid: req.cookies.username, 
-        page: 'products',
-    })
     res.render('pages/products', {
         products: products,
         event: 'products',
@@ -54,11 +55,6 @@ app.post('/confirm', (req, res) => {
     const product = products.find(
         product => product.id === req.body.productId
     )
-    logger.info({
-        userid: req.cookies.username, 
-        product: product,
-        page: 'confirm',
-    })
     res.render('pages/confirm', { 
         product: product,
         event: 'confirm',
@@ -69,11 +65,6 @@ app.get('/payment/:productId', (req, res) => {
     const product = products.find(
         product => product.id === req.params.productId
     )
-    logger.info({
-        userid: req.cookies.username, 
-        product: product,
-        page: 'payment',
-    })
     res.render('pages/payment', { 
         product: product,
         payments: payments,
@@ -88,12 +79,6 @@ app.post('/receipt/:productId', (req, res) => {
     const payment = payments.find(
         payment => payment.id === req.body.paymentId
     )
-    logger.info({
-        userid: req.cookies.username, 
-        product: product,
-        payment: payment,
-        page: 'receipt',
-    })
     res.render('pages/receipt', { 
         product: product,
         event: 'receipt',
@@ -101,17 +86,8 @@ app.post('/receipt/:productId', (req, res) => {
 });
 
 app.post('/log', (req, res) => {
-    const { elementId, event, action } = req.body;
-    logger.info({
-        userid: req.cookies.username, 
-        event: {
-            elementId: elementId,
-            event: event,
-            action: action,
-        },
-    })
     res.sendStatus(200);
-  });
+});
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
