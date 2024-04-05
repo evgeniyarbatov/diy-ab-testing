@@ -1,6 +1,9 @@
 const express = require('express');
+const fs = require('fs');
+
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
+
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
@@ -15,6 +18,10 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const expriments = JSON.parse(
+    fs.readFileSync('expriments.json', 'utf8')
+);
 
 const products = [
     {id: '1', name: 'Product 1', description: 'Some text here', price: '5 SGD' },
