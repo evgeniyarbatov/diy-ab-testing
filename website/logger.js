@@ -1,14 +1,25 @@
-const { format, createLogger, transports } = require('winston');
+'use strict';
 
-const logger = createLogger({
-  level: 'info',
-  format: format.combine(
-    format.timestamp(),
-    format.json(),
-  ),
-  transports: [
-    new transports.File({ filename: 'logs/app.log' }) // Write logs to a file
-  ]
-});
+const {format, createLogger, transports} = require('winston');
 
-module.exports = logger;
+/**
+ * Creates logger and saves the log
+ * @param {string} filename Filename to write to
+ * @return {winston.Logger} Logger instance
+ */
+function getLogger(filename) {
+  return createLogger({
+    level: 'info',
+    format: format.combine(
+        format.timestamp(),
+        format.json(),
+    ),
+    transports: [
+      new transports.File({filename: filename}),
+    ],
+  });
+}
+
+module.exports = {
+  getLogger,
+};

@@ -1,8 +1,10 @@
 <%- include('../partials/header', { title: 'Receipt' }) %>
 <section class="container mt-5 text-center">
     <h2>Receipt</h2>
-    <p>Your order confirmed</p>
+    <p>Your order confirmed:</p>
     <%= product.name %> - <%= product.description %> - <%= product.price %>
+    <p class="mt-2">You have paid with:</p>
+    <%= payment.name %>
     <div>
         <a 
             id="finishButton" 

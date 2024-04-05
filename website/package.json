@@ -17,5 +17,9 @@
     "nodemon": "^3.1.0",
     "uuid": "^9.0.1",
     "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-google": "^0.14.0"
   }
 }
