@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');
 
+const logger = require('./logger');
+
 const app = express();
 const PORT = 8080;
 
@@ -25,11 +27,20 @@ const payments = [
 ]
 
 app.get('/', (req, res) => {
-    res.cookie('username', uuidv4(), { maxAge: 900000, httpOnly: true });
+    const username = uuidv4()
+    logger.info({
+        userid: username, 
+        page: 'welcome',
+    })
+    res.cookie('username', username, { maxAge: 900000, httpOnly: true });
     res.render('pages/welcome');
 });
 
 app.get('/products', (req, res) => {
+    logger.info({
+        userid: req.cookies.username, 
+        page: 'products',
+    })
     res.render('pages/products', {
         products: products,
     });
@@ -37,27 +48,46 @@ app.get('/products', (req, res) => {
 
 app.post('/confirm', (req, res) => {
     const product = products.find(
-        product => product.id === req.body.id
+        product => product.id === req.body.productId
     )
+    logger.info({
+        userid: req.cookies.username, 
+        product: product,
+        page: 'confirm',
+    })
     res.render('pages/confirm', { 
         product: product,
     });
 });
 
-app.get('/payment/:id', (req, res) => {
+app.get('/payment/:productId', (req, res) => {
     const product = products.find(
-        product => product.id === req.params.id
+        product => product.id === req.params.productId
     )
+    logger.info({
+        userid: req.cookies.username, 
+        product: product,
+        page: 'payment',
+    })
     res.render('pages/payment', { 
         product: product,
         payments: payments,
     });
 });
 
-app.get('/receipt/:id', (req, res) => {
+app.post('/receipt/:productId', (req, res) => {
     const product = products.find(
-        product => product.id === req.params.id
+        product => product.id === req.params.productId
     )
+    const payment = payments.find(
+        payment => payment.id === req.body.paymentId
+    )
+    logger.info({
+        userid: req.cookies.username, 
+        product: product,
+        payment: payment,
+        page: 'receipt',
+    })
     res.render('pages/receipt', { 
         product: product,
     });

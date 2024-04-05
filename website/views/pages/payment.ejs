@@ -2,17 +2,20 @@
 <section class="container mt-5 text-center">
     <h2>Select payment method</h2>
     <%= product.name %> - <%= product.description %> - <%= product.price %>
-    <% payments.forEach((payment)=> { %>
-        <div class="form-check text-left m-2">
-            <input class="form-check-input" type="radio" name="id" value="<%= payment.id %>">
-                <%= payment.name %>
+    <form action="/receipt/<%= product.id %>" method="POST">
+        <% payments.forEach((payment)=> { %>
+            <div class="form-check text-left m-2">
+                <input class="form-check-input" type="radio" name="paymentId" value="<%= payment.id %>">
+                    <%= payment.name %>
+            </div>
+        <% }) %>
+        <div>
+            <button type="submit" class="btn btn-primary mt-3 m-1 w-100">Pay</a>
         </div>
-    <% }) %>
-
-    <%- include('../partials/buttons', {
-        link: `/receipt/${product.id}`,
-        text: 'Pay'
-     }) %>
+        <div>
+            <a href="/" class="btn btn-secondary m-1 w-100">Cancel</a>
+        </div>
+    </form>
 </section>
 <%- include('../partials/footer') %>
 

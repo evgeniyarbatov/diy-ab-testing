@@ -5,7 +5,7 @@
     <form action="/confirm" method="POST">
         <% products.forEach((product)=> { %>
             <div class="form-check text-left m-2">
-                <input class="form-check-input" type="radio" name="id" value="<%= product.id %>">
+                <input class="form-check-input" type="radio" name="productId" value="<%= product.id %>">
                     <%= product.name %> - <%= product.description %> - <%= product.price %>
             </div>
         <% }) %>
