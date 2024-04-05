@@ -2,7 +2,13 @@
 <section class="container mt-5 text-center">
     <h2>Welcome!</h2>
     <div>
-        <a href="/products" class="btn btn-primary m-1 w-100">Start</a>
+        <a 
+            id="startButton" 
+            data-event="<%= event %>" 
+            href="/products" 
+            class="btn btn-primary m-1 w-100">
+            Start
+        </a>
     </div>
 </section>
 <%- include('../partials/footer') %>

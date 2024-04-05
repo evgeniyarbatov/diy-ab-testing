@@ -10,11 +10,15 @@
             </div>
         <% }) %>
         <div>
-            <button type="submit" class="btn btn-primary mt-3 m-1 w-100">Pay</a>
+            <button 
+                id="payButton" 
+                data-event="<%= event %>" 
+                type="submit" 
+                class="btn btn-primary mt-3 m-1 w-100">
+                Pay
+            </button>
         </div>
-        <div>
-            <a href="/" class="btn btn-secondary m-1 w-100">Cancel</a>
-        </div>
+        <%- include('../partials/cancel-button', { event: event }) %>
     </form>
 </section>
 <%- include('../partials/footer') %>

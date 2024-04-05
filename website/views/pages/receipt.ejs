@@ -4,7 +4,13 @@
     <p>Your order confirmed</p>
     <%= product.name %> - <%= product.description %> - <%= product.price %>
     <div>
-        <a href="/" class="btn btn-primary mt-3 m-1 w-100">Done</a>
+        <a 
+            id="finishButton" 
+            data-event="<%= event %>" 
+            href="/" 
+            class="btn btn-primary mt-3 m-1 w-100">
+            Done
+        </a>
     </div>
 </section>
 <%- include('../partials/footer') %>

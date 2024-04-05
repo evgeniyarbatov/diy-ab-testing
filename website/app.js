@@ -33,7 +33,9 @@ app.get('/', (req, res) => {
         page: 'welcome',
     })
     res.cookie('username', username, { maxAge: 900000, httpOnly: true });
-    res.render('pages/welcome');
+    res.render('pages/welcome', {
+        event: 'welcome',
+    });
 });
 
 app.get('/products', (req, res) => {
@@ -43,6 +45,7 @@ app.get('/products', (req, res) => {
     })
     res.render('pages/products', {
         products: products,
+        event: 'products',
     });
 });
 
@@ -57,6 +60,7 @@ app.post('/confirm', (req, res) => {
     })
     res.render('pages/confirm', { 
         product: product,
+        event: 'confirm',
     });
 });
 
@@ -72,6 +76,7 @@ app.get('/payment/:productId', (req, res) => {
     res.render('pages/payment', { 
         product: product,
         payments: payments,
+        event: 'payment',
     });
 });
 
@@ -90,8 +95,18 @@ app.post('/receipt/:productId', (req, res) => {
     })
     res.render('pages/receipt', { 
         product: product,
+        event: 'receipt',
     });
 });
+
+app.post('/log', (req, res) => {
+    const { event } = req.body;
+    logger.info({
+        userid: req.cookies.username, 
+        event: event,
+    })
+    res.sendStatus(200);
+  });
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);

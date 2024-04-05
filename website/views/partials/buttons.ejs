@@ -1,8 +1,10 @@
 <div>
-    <a href="<%= link %>" class="btn btn-primary mt-3 m-1 w-100">
+    <a 
+        id="continueButton" 
+        href="<%= link %>" 
+        data-event="<%= event %>" 
+        class="btn btn-primary mt-3 m-1 w-100">
         <%= text %>
     </a>
 </div>
-<div>
-    <a href="/" class="btn btn-secondary m-1 w-100">Cancel</a>
-</div>
+<%- include('cancel-button', { event: event }) %>
