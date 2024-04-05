@@ -1,20 +1,33 @@
 const experiments = [
   {
-    'feature': 'PrimaryColorButton',
-    'control': [{
-      'params': {
-        'background-color': '#007bff',
-        'color': '#ffffff',
-        'border-color': '#007bff',
-      },
-    }],
-    'test': [{
-      'params': {
-        'background-color': '#ff0000',
-        'color': '#ffffff',
-        'border-color': '#ff0000',
-      },
-    }],
+    feature: 'PrimaryButtonColor',
+    control: 'blue',
+    test: 'red',
+  },
+  {
+    feature: 'DefaultSelectedProduct',
+    control: 'random',
+    test: 'low-price',
+  },
+  {
+    feature: 'SkipConfirmationScreen',
+    control: 'false',
+    test: 'true',
+  },
+  {
+    feature: 'CancelToPreviousScreen',
+    control: 'false',
+    test: 'true',
+  },
+  {
+    feature: 'HighlightCheapestProduct',
+    control: 'false',
+    test: 'true',
+  },
+  {
+    feature: 'RandomiseProducts',
+    control: 'false',
+    test: 'true',
   },
 ];
 
