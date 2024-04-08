@@ -17,7 +17,7 @@ const experiments = [
     test: 'true',
   },
   {
-    feature: 'CancelToPreviousScreen',
+    feature: Features.CancelToPreviousScreen,
     control: 'false',
     test: 'true',
   },

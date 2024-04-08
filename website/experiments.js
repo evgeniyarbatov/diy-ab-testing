@@ -14,50 +14,39 @@ function getIsFeature(
 
 /**
  * Allocate the user to either test or control group
- * @param {string} username UserID accessing the site
  * @param {string} feature Feature we are testing
+ * @param {Object} res Response object
  * @return {string} Test or control group
  */
 function getExperimentGroup(
-    username,
     feature,
+    res,
 ) {
   const group = Math.random() < 0.5 ? 'test' : 'control';
+  res.cookie(feature, group, {maxAge: 900000, httpOnly: true});
   return group;
 }
 
-/**
- * Cache result of the feature check in the cookies
- * @param {string} feature Feature we are checking
- * @param {string} group Feature group
- * @param {Object} res Response object
- * @return {void}
- */
-function cacheFeatureGroup(
-    feature,
-    group,
-    res,
-) {
-  res.cookie(feature, group, {maxAge: 900000, httpOnly: true});
-}
 
 /**
- * Check which group does the user belong to
+ * Check if user part of test group
  * @param {Object} cookies Cookies sent with the request
  * @param {string} feature Feature we are checking
- * @return {string} Test or control group
+ * @param {Object} res Response object
+ * @return {bool}
  */
-function getUserGroup(
+function getIsUserInTestGroup(
     cookies,
     feature,
+    res,
 ) {
-  return feature in cookies ?
+  const group = feature in cookies ?
     cookies[feature] :
-    getExperimentGroup(cookies.username, feature);
+    getExperimentGroup(feature, res);
+  return group === 'test';
 }
 
 module.exports = {
-  getUserGroup,
-  cacheFeatureGroup,
   getIsFeature,
+  getIsUserInTestGroup,
 };

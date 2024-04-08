@@ -24,7 +24,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use((req, res, next) => {
-  // Store the state of experiment features
   const experiments = Object.entries(req.cookies).filter(
       ([name, value]) => Experiments.getIsFeature(name),
   );
@@ -63,26 +62,35 @@ app.get('/', (req, res) => {
 });
 
 app.get('/products', (req, res) => {
-  const group = Experiments.getUserGroup(
+  const skipConfirmation = Experiments.getIsUserInTestGroup(
       req.cookies,
       Features.SkipConfirmationScreen,
+      res,
   );
-  Experiments.cacheFeatureGroup(Features.SkipConfirmationScreen, group, res);
 
   res.render('pages/products', {
     products: products,
     page: 'products',
-    skipConfirmationScreen: group === 'test',
+    skipConfirmationScreen: skipConfirmation,
   });
 });
 
 app.post('/confirm', (req, res) => {
+  const cancelToPreviousScreen = Experiments.getIsUserInTestGroup(
+      req.cookies,
+      Features.CancelToPreviousScreen,
+      res,
+  );
+
   const product = products.find(
       (product) => product.id === req.body.productId,
   );
   res.render('pages/confirm', {
     product: product,
     page: 'confirm',
+    cancelLink: cancelToPreviousScreen ?
+      'javascript:history.back()' :
+      '/',
   });
 });
 
@@ -91,6 +99,12 @@ app.post('/payment', (req, res) => {
 });
 
 app.get('/payment/:productId', (req, res) => {
+  const cancelToPreviousScreen = Experiments.getIsUserInTestGroup(
+      req.cookies,
+      Features.CancelToPreviousScreen,
+      res,
+  );
+
   const product = products.find(
       (product) => product.id === req.params.productId,
   );
@@ -98,6 +112,9 @@ app.get('/payment/:productId', (req, res) => {
     product: product,
     payments: payments,
     page: 'payment',
+    cancelLink: cancelToPreviousScreen ?
+      'javascript:history.back()' :
+      '/',
   });
 });
 
