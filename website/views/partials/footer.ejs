@@ -1,26 +1,5 @@
         <footer class="container mt-2 text-center">
             &copy; 2024 A/B Test Example
         </footer>
-        <script>
-            function log(elementId, page) {
-                fetch('/log', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        elementId: elementId,
-                        page: page,
-                        action: 'click',   
-                    })
-                });
-            }
-            document.querySelectorAll('button, a').forEach(element => {
-                element.addEventListener('click', function() {
-                    const page = element.getAttribute('data-page');
-                    log(element.id, page);
-                });
-            });
-        </script>
     </body>
 </html>

@@ -24,11 +24,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use((req, res, next) => {
+  if (req.url == '/') {
+    if (req.cookies) {
+      res.clearCookie('username');
+      for (const cookieName in req.cookies) {
+        if (Experiments.getIsFeature(cookieName)) {
+          res.clearCookie(cookieName);
+        }
+      }
+    }
+  }
+
   const experiments = Object.entries(req.cookies).filter(
       ([name, value]) => Experiments.getIsFeature(name),
   );
-
-  extra = {...req.body};
 
   logger.info({
     username: req.cookies.username,
@@ -36,8 +45,8 @@ app.use((req, res, next) => {
     experiments: experiments.map(([name, group]) => {
       return {group: group, name: name};
     }),
-    event: extra.action ?? 'impression',
-    page: extra.page ?? req.url.split('/')[1],
+    event: 'impression',
+    page: req.url.split('/')[1],
     extra: req.body,
   });
 
@@ -45,14 +54,6 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
-  if (req.cookies) {
-    for (const cookieName in req.cookies) {
-      if (Experiments.getIsFeature(cookieName)) {
-        res.clearCookie(cookieName);
-      }
-    }
-  }
-
   const username = uuidv4();
   res.cookie('username', username, {maxAge: 900000, httpOnly: true});
 
@@ -141,10 +142,6 @@ app.post('/receipt/:productId', (req, res) => {
     payment: payment,
     page: 'receipt',
   });
-});
-
-app.post('/log', (req, res) => {
-  res.sendStatus(200);
 });
 
 app.listen(PORT, () => {
