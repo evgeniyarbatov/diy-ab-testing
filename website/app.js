@@ -29,7 +29,7 @@ app.use((req, res, next) => {
       ([name, value]) => Experiments.getIsFeature(name),
   );
 
-  const extra = {...req.body, ...req.params};
+  extra = {...req.body};
 
   logger.info({
     username: req.cookies.username,
@@ -38,7 +38,8 @@ app.use((req, res, next) => {
       return {group: group, name: name};
     }),
     event: extra.action ?? 'impression',
-    extra: extra,
+    page: extra.page ?? req.url.split('/')[1],
+    extra: req.body,
   });
 
   next();
