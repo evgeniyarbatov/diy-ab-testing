@@ -2,11 +2,6 @@ const Features = require('./features.js');
 
 const experiments = [
   {
-    feature: 'PrimaryButtonColor',
-    control: 'blue',
-    test: 'red',
-  },
-  {
     feature: Features.DefaultSelectedProduct,
     control: 'random',
     test: 'price',
@@ -18,16 +13,6 @@ const experiments = [
   },
   {
     feature: Features.CancelToPreviousScreen,
-    control: 'false',
-    test: 'true',
-  },
-  {
-    feature: 'HighlightCheapestProduct',
-    control: 'false',
-    test: 'true',
-  },
-  {
-    feature: 'RandomiseProducts',
     control: 'false',
     test: 'true',
   },
