@@ -24,14 +24,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use((req, res, next) => {
-  const cookiesToLog = Object.entries(req.cookies).filter(
+  const experiments = Object.entries(req.cookies).filter(
       ([name, value]) => Experiments.getIsFeature(name),
   );
 
   logger.info({
     username: req.cookies.username,
     url: req.url,
-    cookies: cookiesToLog,
+    experiments: experiments.map(([name, group]) => {
+      return { group: group, name: name };
+    }),
     extra: {...req.body, ...req.params},
   });
 
