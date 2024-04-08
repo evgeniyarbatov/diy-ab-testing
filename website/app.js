@@ -5,11 +5,11 @@ const path = require('path');
 const {v4: uuidv4} = require('uuid');
 
 const {getLogger} = require('./logger');
-const {getExperimentGroup} = require('./experiments');
+const Experiments = require('./experiments');
 
+const Features = require('./config/features.js');
 const products = require('./config/products');
 const payments = require('./config/payments');
-const experiments = require('./config/experiments');
 
 const app = express();
 const logger = getLogger('logs/app.log');
@@ -24,9 +24,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use((req, res, next) => {
+  const cookiesToLog = Object.entries(req.cookies).filter(
+      ([name, value]) => Experiments.getIsFeature(name),
+  );
+
   logger.info({
+    username: req.cookies.username,
     url: req.url,
-    cookies: req.cookies,
+    cookies: cookiesToLog,
     extra: {...req.body, ...req.params},
   });
 
@@ -34,14 +39,16 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res) => {
+  if (req.cookies) {
+    for (const cookieName in req.cookies) {
+      if (Experiments.getIsFeature(cookieName)) {
+        res.clearCookie(cookieName);
+      }
+    }
+  }
+
   const username = uuidv4();
   res.cookie('username', username, {maxAge: 900000, httpOnly: true});
-
-  experiments.map((experiment) => {
-    const feature = experiment.feature;
-    const group = getExperimentGroup(username, feature);
-    res.cookie(feature, group, {maxAge: 900000, httpOnly: true});
-  });
 
   res.render('pages/welcome', {
     event: 'welcome',
@@ -49,9 +56,16 @@ app.get('/', (req, res) => {
 });
 
 app.get('/products', (req, res) => {
+  const group = Experiments.getUserGroup(
+      req.cookies,
+      Features.SkipConfirmationScreen,
+  );
+  Experiments.cacheFeatureGroup(Features.SkipConfirmationScreen, group, res);
+
   res.render('pages/products', {
     products: products,
     event: 'products',
+    skipConfirmationScreen: group === 'test',
   });
 });
 
@@ -63,6 +77,10 @@ app.post('/confirm', (req, res) => {
     product: product,
     event: 'confirm',
   });
+});
+
+app.post('/payment', (req, res) => {
+  res.redirect(`/payment/${req.body.productId}`);
 });
 
 app.get('/payment/:productId', (req, res) => {

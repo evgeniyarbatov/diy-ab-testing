@@ -1,3 +1,5 @@
+const Features = require('./features.js');
+
 const experiments = [
   {
     feature: 'PrimaryButtonColor',
@@ -10,7 +12,7 @@ const experiments = [
     test: 'price',
   },
   {
-    feature: 'SkipConfirmationScreen',
+    feature: Features.SkipConfirmationScreen,
     control: 'false',
     test: 'true',
   },
