@@ -14,12 +14,12 @@
         <div>
             <button             
                 id="selectButton" 
-                data-event="<%= event %>" 
+                data-page="<%= page %>" 
                 type="submit" class="btn btn-primary mt-3 m-1 w-100">
                 Select
             </button>
         </div>
-        <%- include('../partials/cancel-button', { event: event }) %>
+        <%- include('../partials/cancel-button', { page: page }) %>
     </form>
 </section>
 <%- include('../partials/footer') %>

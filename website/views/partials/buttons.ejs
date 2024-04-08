@@ -2,9 +2,9 @@
     <a 
         id="continueButton" 
         href="<%= link %>" 
-        data-event="<%= event %>" 
+        data-page="<%= page %>" 
         class="btn btn-primary mt-3 m-1 w-100">
         <%= text %>
     </a>
 </div>
-<%- include('cancel-button', { event: event }) %>
+<%- include('cancel-button', { page: page }) %>

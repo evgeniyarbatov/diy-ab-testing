@@ -2,7 +2,7 @@
             &copy; 2024 A/B Test Example
         </footer>
         <script>
-            function log(elementId, event) {
+            function log(elementId, page) {
                 fetch('/log', {
                     method: 'POST',
                     headers: {
@@ -10,15 +10,15 @@
                     },
                     body: JSON.stringify({
                         elementId: elementId,
-                        event: event,
+                        page: page,
                         action: 'click',   
                     })
                 });
             }
             document.querySelectorAll('button, a').forEach(element => {
                 element.addEventListener('click', function() {
-                    const event = element.getAttribute('data-event');
-                    log(element.id, event);
+                    const page = element.getAttribute('data-page');
+                    log(element.id, page);
                 });
             });
         </script>

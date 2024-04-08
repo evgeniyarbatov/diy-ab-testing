@@ -24,17 +24,21 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use((req, res, next) => {
+  // Store the state of experiment features
   const experiments = Object.entries(req.cookies).filter(
       ([name, value]) => Experiments.getIsFeature(name),
   );
+
+  const extra = {...req.body, ...req.params};
 
   logger.info({
     username: req.cookies.username,
     url: req.url,
     experiments: experiments.map(([name, group]) => {
-      return { group: group, name: name };
+      return {group: group, name: name};
     }),
-    extra: {...req.body, ...req.params},
+    event: extra.action ?? 'impression',
+    extra: extra,
   });
 
   next();
@@ -53,7 +57,7 @@ app.get('/', (req, res) => {
   res.cookie('username', username, {maxAge: 900000, httpOnly: true});
 
   res.render('pages/welcome', {
-    event: 'welcome',
+    page: 'welcome',
   });
 });
 
@@ -66,7 +70,7 @@ app.get('/products', (req, res) => {
 
   res.render('pages/products', {
     products: products,
-    event: 'products',
+    page: 'products',
     skipConfirmationScreen: group === 'test',
   });
 });
@@ -77,7 +81,7 @@ app.post('/confirm', (req, res) => {
   );
   res.render('pages/confirm', {
     product: product,
-    event: 'confirm',
+    page: 'confirm',
   });
 });
 
@@ -92,7 +96,7 @@ app.get('/payment/:productId', (req, res) => {
   res.render('pages/payment', {
     product: product,
     payments: payments,
-    event: 'payment',
+    page: 'payment',
   });
 });
 
@@ -106,7 +110,7 @@ app.post('/receipt/:productId', (req, res) => {
   res.render('pages/receipt', {
     product: product,
     payment: payment,
-    event: 'receipt',
+    page: 'receipt',
   });
 });
 
