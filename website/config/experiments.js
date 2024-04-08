@@ -7,7 +7,7 @@ const experiments = [
     test: 'red',
   },
   {
-    feature: 'DefaultSelectedProduct',
+    feature: Features.DefaultSelectedProduct,
     control: 'random',
     test: 'price',
   },

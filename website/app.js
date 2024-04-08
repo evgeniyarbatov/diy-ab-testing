@@ -68,6 +68,17 @@ app.get('/products', (req, res) => {
       res,
   );
 
+  const cheapestProductSelected = Experiments.getIsUserInTestGroup(
+      req.cookies,
+      Features.DefaultSelectedProduct,
+      res,
+  );
+  if (cheapestProductSelected) {
+    products.sort((a, b) => a.price - b.price);
+  } else {
+    products.sort((a, b) => Math.random() - 0.5);
+  }
+
   res.render('pages/products', {
     products: products,
     page: 'products',

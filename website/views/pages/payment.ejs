@@ -3,9 +3,15 @@
     <h2>Select payment method</h2>
     <%= product.name %> - <%= product.description %> - <%= product.price %>
     <form action="/receipt/<%= product.id %>" method="POST">
-        <% payments.forEach((payment)=> { %>
+        <% payments.forEach((payment, index)=> { %>
             <div class="form-check text-left m-2">
-                <input class="form-check-input" type="radio" name="paymentId" value="<%= payment.id %>">
+                <input 
+                    class="form-check-input" 
+                    type="radio" 
+                    name="paymentId" 
+                    value="<%= payment.id %>"
+                    <% if (index === 0) { %>checked<% } %>
+                >
                     <%= payment.name %>
             </div>
         <% }) %>
